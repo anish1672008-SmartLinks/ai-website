@@ -1,0 +1,19 @@
+body {
+  font-family: Geometric Sans-Serifs;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+.box {
+  margin: 20px auto;
+  padding: 20px;
+  width: 300px;
+  background: #1e293b;
+  border-radius: 10px;
+}
+
+input {
+  width: 90%;
+  padding: 8px;
+}
