@@ -1,17 +1,95 @@
-<h2>Hindi AI Chat</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hindi AI Chat</title>
 
+  <style>
+    body {
+      background: #0b0f1a;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
 
-<select name="language">
-  <option value="Hindi">Hindi</option>
-  <option value="English">English</option>
-</select>
+    h2 {
+      color: #00ffe1;
+      text-shadow: 0 0 10px #00ffe1;
+    }
 
-<input id="msg">
-<button onclick="send()">Send</button>
-<button onclick="voice()">🎤</button>
-<p id="reply"></p>
+    /* Chat Input Box */
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 2px solid #00ffe1;
+      background: #11162a;
+      color: white;
+      outline: none;
+      resize: vertical;
+      box-shadow: 0 0 15px rgba(0,255,225,0.4);
+    }
 
-<script src="/static/js/chat.js"></script>
-<script src="/static/js/theme.js"></script>
+    /* Neon Buttons */
+    .neon-btn, select {
+      margin-top: 10px;
+      padding: 10px 18px;
+      font-size: 15px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #00ffe1;
+      color: #000;
+      box-shadow: 0 0 12px #00ffe1;
+      transition: 0.3s;
+    }
 
+    .neon-btn:hover, select:hover {
+      box-shadow: 0 0 25px #00ffe1, 0 0 50px #00ffe1;
+      transform: scale(1.05);
+    }
 
+    select {
+      background: #11162a;
+      color: white;
+      border: 2px solid #00ffe1;
+    }
+
+    #reply {
+      margin-top: 20px;
+      padding: 15px;
+      background: #11162a;
+      border-left: 4px solid #00ffe1;
+      box-shadow: 0 0 10px rgba(0,255,225,0.3);
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>🤖 Hindi AI Chat</h2>
+
+  <select name="language">
+    <option value="Hindi">Hindi</option>
+    <option value="English">English</option>
+  </select>
+
+  <br><br>
+
+  <!-- Bigger prompt box -->
+  <textarea id="msg" placeholder="Type your message here..."></textarea>
+
+  <br>
+
+  <button class="neon-btn" onclick="send()">🚀 Send</button>
+  <button class="neon-btn" onclick="voice()">🎤 Mic</button>
+
+  <p id="reply"></p>
+
+  <script src="/static/js/chat.js"></script>
+  <script src="/static/js/theme.js"></script>
+
+</body>
+</html>
