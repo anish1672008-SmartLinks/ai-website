@@ -10,10 +10,11 @@ from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
-load_dotenv()   
+load_dotenv()
+
 app.secret_key = os.getenv("SECRET_KE")
 
-# ✅ Register blueprints
+# Register blueprints
 app.register_blueprint(auth)
 app.register_blueprint(chat)
 
@@ -37,5 +38,7 @@ def dashboard():
         return redirect("/")
     return render_template("dashboard.html")
 
+# ✅ IMPORTANT FIX
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
