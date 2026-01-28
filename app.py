@@ -11,7 +11,7 @@ import os
 
 app = Flask(__name__)
 load_dotenv()   
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KE")
 
 # ✅ Register blueprints
 app.register_blueprint(auth)
