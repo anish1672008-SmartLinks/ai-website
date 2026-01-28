@@ -1,29 +1,34 @@
-<script>
-function sendMsg() {
-  const msgInput = document.getElementById("msg");
-  const replyBox = document.getElementById("reply");
+let currentMode = "hindi";
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById("modeText").innerText =
+    mode === "english" ? "Current Mode: English AI" : "Current Mode: Hindi AI";
+
+  console.log("Mode:", currentMode);
+}
+
+function send() {
+  const message = document.getElementById("msg").value.trim();
+  if (!message) return;
 
   fetch("/chat", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
-      message: msgInput.value
+      message: message,
+      mode: currentMode
     })
   })
-  .then(res => {
-    if (!res.ok) {
-      throw new Error("Chat API error: " + res.status);
-    }
-    return res.json();
-  })
+  .then(res => res.json())
   .then(data => {
-    replyBox.innerText = data.reply || "No reply received";
+    document.getElementById("reply").innerText = data.reply;
+    document.getElementById("msg").value = "";
   })
   .catch(err => {
     console.error(err);
-    alert("Chat failed");
+    document.getElementById("reply").innerText = "Error connecting to AI.";
   });
 }
-
-console.log("RAW RESPONSE:", data);
-</script>

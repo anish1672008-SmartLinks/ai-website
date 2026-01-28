@@ -2,7 +2,10 @@ function send(){
  fetch("/chat",{
   method:"POST",
   headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({message:msg.value})
+  body: JSON.stringify({
+  message: userMessage,
+  mode: currentMode
+})
  }).then(r=>r.json()).then(d=>{
   reply.innerText=d.reply;
   speak(d.reply);
