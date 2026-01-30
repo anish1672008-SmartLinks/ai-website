@@ -30,6 +30,7 @@ def login():
 
     if user and check_password_hash(user["password"], request.form["password"]):
         session["user_id"] = user["id"]
+        session["username"] = user["username"]
         return redirect("/dashboard")
 
     return "Invalid login"

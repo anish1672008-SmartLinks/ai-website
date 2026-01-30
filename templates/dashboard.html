@@ -1,127 +1,325 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Hindi AI Chat</title>
+<meta charset="UTF-8">
+<title>Smart AI</title>
 
-  <style>
-    body {
-      background: #0b0f1a;
-      color: white;
-      font-family: Arial, sans-serif;
-      padding: 30px;
-    }
+<style>
+/* ===== LIGHT MODE FIX ===== */
+.light-mode {
+  background: #f2f2f2;
+  color: black;
+}
 
-    h2 {
-      color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1;
-    }
+.light-mode #sidebar {
+  background: #e0e0e0;
+  border-right: 2px solid #00bfa5;
+}
 
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 15px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 2px solid #00ffe1;
-      background: #11162a;
-      color: white;
-      outline: none;
-      resize: vertical;
-      box-shadow: 0 0 15px rgba(0,255,225,0.4);
-    }
+.light-mode .chat-item {
+  background: #ffffff;
+  color: black;
+}
 
-    .neon-btn {
-      margin-top: 10px;
-      padding: 10px 18px;
-      font-size: 15px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      background: #00ffe1;
-      color: #000;
-      box-shadow: 0 0 12px #00ffe1;
-      transition: 0.3s;
-    }
+.light-mode .chat-item:hover {
+  background: #00ffe1;
+  color: black;
+}
 
-    .neon-btn:hover {
-      box-shadow: 0 0 25px #00ffe1, 0 0 50px #00ffe1;
-      transform: scale(1.05);
-    }
+.light-mode #chatBox {
+  background: #f9f9f9;
+}
 
-    select.neon-btn {
-      background: #11162a;
-      color: white;
-      border: 2px solid #00ffe1;
-    }
+.light-mode textarea {
+  background: white;
+  color: black;
+  border: 2px solid #00bfa5;
+}
 
-    #reply {
-      margin-top: 20px;
-      padding: 15px;
-      background: #11162a;
-      border-left: 4px solid #00ffe1;
-      box-shadow: 0 0 10px rgba(0,255,225,0.3);
-      min-height: 40px;
-    }
-  </style>
+/* user message */
+.light-mode .user {
+  background: #00bfa5;
+  color: black;
+}
+
+/* AI message */
+.light-mode .ai {
+  background: white;
+  color: black;
+  border: 1px solid #00bfa5;
+}
+
+
+/* BASE */
+body {
+  margin: 0;
+  background: #0b0f1a;
+  color: white;
+  font-family: Arial, sans-serif;
+  height: 100vh;
+  display: flex;
+}
+
+/* SIDEBAR */
+#sidebar {
+  width: 260px;
+  background: #050814;
+  border-right: 2px solid #00ffe1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+#sidebar h3 {
+  color: #00ffe1;
+  text-align: center;
+}
+
+.chat-item {
+  padding: 10px;
+  background: #11162a;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-item:hover {
+  background: #00ffe1;
+  color: black;
+}
+
+/* MAIN */
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+#chatBox {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+/* MESSAGES */
+.msg {
+  max-width: 70%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 12px;
+}
+
+.user {
+  background: #00ffe1;
+  color: black;
+  align-self: flex-end;
+}
+
+.ai {
+  background: #11162a;
+  border: 1px solid #00ffe1;
+  align-self: flex-start;
+}
+
+/* CONTROLS */
+#controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+textarea {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid #00ffe1;
+  background: #11162a;
+  color: white;
+  resize: none;
+  height: 60px;
+}
+
+.neon-btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #00ffe1;
+  color: black;
+}
+
+select {
+  background: #11162a;
+  color: white;
+  border: 1px solid #00ffe1;
+  border-radius: 6px;
+  padding: 5px;
+}
+</style>
 </head>
 
 <body>
 
-  <h2>🤖 Hindi AI Chat</h2>
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <h3>💬 Chats</h3>
+  <h3 id="usernameBox">👤 User</h3>
 
-  <!-- Language Selector -->
-  <select id="languageSelect" class="neon-btn" onchange="changeLanguage()">
+  <button onclick="toggleTheme()">🌗 Mode</button>
+  <button class="neon-btn" onclick="newChat()">+ New Chat</button>
+
+  <div id="history"></div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <h2 style="color:#00ffe1;">🤖 AniSun AI</h2>
+
+  <select id="languageSelect" onchange="changeLanguage()">
     <option value="hindi">Hindi</option>
     <option value="english">English</option>
   </select>
 
-  <br><br>
+  <div id="chatBox"></div>
 
-  <textarea id="msg" placeholder="Type your message here..."></textarea>
+  <div id="controls">
+    <textarea id="msg" placeholder="Type your message..."></textarea>
+    <button class="neon-btn" onclick="send()">Send</button>
+  </div>
+</div>
+<script>
+let currentMode = "hindi";
+let currentSessionId = null;
+function loadUser() {
+  fetch("/me")
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("usernameBox").innerText =
+        "👤 " + d.username;
+    });
+}
 
-  <br>
+function changeLanguage() {
+  currentMode = document.getElementById("languageSelect").value;
+}
 
-  <button class="neon-btn" onclick="send()">🚀 Send</button>
-  <button class="neon-btn" onclick="voice()">🎤 Mic</button>
+function addMessage(text, role) {
+  const box = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.innerText = text;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
 
-  <p id="modeText">Current Mode: Hindi AI</p>
+function send() {
+  const msg = document.getElementById("msg").value.trim();
+  if (!msg) return;
 
-  <div id="reply"></div>
+  addMessage(msg, "user");
 
-  <script src="/static/js/chat.js"></script>
-  <script src="/static/js/theme.js"></script>
+  fetch("/chat", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      message: msg,
+      mode: currentMode,
+      session_id: currentSessionId
+    })
+  })
+  .then(r => r.json())
+  .then(d => addMessage(d.reply, "ai"));
 
-  <!-- MAIN LOGIC -->
-  <script>
-    let currentMode = "hindi";
+  document.getElementById("msg").value = "";
+}
 
-    function changeLanguage() {
-      currentMode = document.getElementById("languageSelect").value;
-      document.getElementById("modeText").innerText =
-        "Current Mode: " + (currentMode === "english" ? "English AI" : "Hindi AI");
-    }
+function newChat() {
+  fetch("/new_chat", {method:"POST"})
+  .then(r => r.json())
+  .then(d => {
+    currentSessionId = d.session_id;
+    document.getElementById("chatBox").innerHTML = "";
+    loadHistory();
+  });
+}
 
-    function send() {
-      const msg = document.getElementById("msg").value;
-      if (!msg.trim()) return;
+function loadHistory() {
+  fetch("/history")
+  .then(r => r.json())
+  .then(data => {
+    const hist = document.getElementById("history");
+    hist.innerHTML = "";
 
-      fetch("/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: msg,
-          mode: currentMode
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("reply").innerText = data.reply;
-      });
+    data.forEach(chat => {
+      const div = document.createElement("div");
+      div.className = "chat-item";
 
-      document.getElementById("msg").value = "";
-    }
-  </script>
+      const title = document.createElement("span");
+      title.innerText = chat.title;
+      title.onclick = () => loadChat(chat.id);
+
+      const renameBtn = document.createElement("button");
+      renameBtn.innerText = "✏";
+      renameBtn.onclick = e => {
+        e.stopPropagation();
+        renameChat(chat.id);
+      };
+
+      const delBtn = document.createElement("button");
+      delBtn.innerText = "🗑";
+      delBtn.onclick = e => {
+        e.stopPropagation();
+        deleteChat(chat.id);
+      };
+
+      div.appendChild(title);
+      div.appendChild(renameBtn);
+      div.appendChild(delBtn);
+
+      hist.appendChild(div);
+    });
+  });
+}
+
+function loadChat(id) {
+  currentSessionId = id;
+  document.getElementById("chatBox").innerHTML = "";
+
+  fetch("/load_chat/" + id)
+  .then(r => r.json())
+  .then(data => {
+    data.forEach(m => addMessage(m.content, m.role));
+  });
+}
+
+function deleteChat(id) {
+  if (!confirm("Delete chat?")) return;
+
+  fetch("/delete_chat/" + id, {method:"POST"})
+  .then(() => loadHistory());
+}
+
+function renameChat(id) {
+  const name = prompt("Enter chat name:");
+  if (!name) return;
+
+  fetch("/rename_chat/" + id, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({title:name})
+  }).then(loadHistory);
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("light-mode");
+}
+loadUser();
+loadHistory();
+newChat();
+</script>
 
 </body>
 </html>
