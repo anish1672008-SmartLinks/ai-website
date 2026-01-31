@@ -1,6 +1,7 @@
 /**************** GLOBAL ****************/
 let currentSessionId = null;
 let currentMode = "hindi";
+let recognition = null;
 
 /**************** ADD MESSAGE ****************/
 function addMessage(text, role) {
@@ -15,6 +16,20 @@ function addMessage(text, role) {
 
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
+}
+
+/**************** TEXT TO SPEECH ****************/
+function speakText(text) {
+  const toggle = document.getElementById("speakToggle");
+
+  if (!toggle || !toggle.checked) return;
+
+  window.speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = currentMode === "english" ? "en-US" : "hi-IN";
+
+  window.speechSynthesis.speak(utter);
 }
 
 /**************** SEND ****************/
@@ -40,10 +55,30 @@ function send() {
     })
   })
   .then(r => r.json())
-  .then(d => addMessage(d.reply, "ai"))
+  .then(d => {
+    addMessage(d.reply, "ai");
+    speakText(d.reply);
+  })
   .catch(() => addMessage("Server error", "ai"));
 
   input.value = "";
+}
+
+/**************** VOICE INPUT ****************/
+function voice() {
+  if (!("webkitSpeechRecognition" in window)) {
+    alert("Voice input not supported");
+    return;
+  }
+
+  recognition = new webkitSpeechRecognition();
+  recognition.lang = currentMode === "english" ? "en-US" : "hi-IN";
+  recognition.start();
+
+  recognition.onresult = function (event) {
+    document.getElementById("msg").value =
+      event.results[0][0].transcript;
+  };
 }
 
 /**************** LANGUAGE ****************/
@@ -53,10 +88,10 @@ function changeLanguage() {
 
 /**************** NEW CHAT ****************/
 function newChat() {
-  fetch("/new_chat", {method: "POST"})
+  fetch("/new_chat", { method: "POST" })
     .then(r => r.json())
     .then(d => {
-      currentSessionId = d.chat_id;
+      currentSessionId = d.session_id || d.chat_id;
 
       document.getElementById("chatBox").innerHTML = "";
       loadHistory();
@@ -75,20 +110,26 @@ function loadHistory() {
         const div = document.createElement("div");
         div.className = "chat-item";
 
+        // Title
         const title = document.createElement("span");
-        title.innerText = chat.title;
+        title.innerText = chat.title || "New Chat";
+        title.style.cursor = "pointer";
         title.onclick = () => loadChat(chat.id);
 
+        // Rename button
         const renameBtn = document.createElement("button");
         renameBtn.innerText = "✏";
-        renameBtn.onclick = e => {
+        renameBtn.style.marginLeft = "5px";
+        renameBtn.onclick = (e) => {
           e.stopPropagation();
           renameChat(chat.id);
         };
 
+        // Delete button
         const deleteBtn = document.createElement("button");
         deleteBtn.innerText = "🗑";
-        deleteBtn.onclick = e => {
+        deleteBtn.style.marginLeft = "5px";
+        deleteBtn.onclick = (e) => {
           e.stopPropagation();
           deleteChat(chat.id);
         };
@@ -105,7 +146,6 @@ function loadHistory() {
 /**************** LOAD CHAT ****************/
 function loadChat(id) {
   currentSessionId = id;
-
   const box = document.getElementById("chatBox");
   box.innerHTML = "";
 
@@ -120,7 +160,7 @@ function loadChat(id) {
 function deleteChat(id) {
   if (!confirm("Delete chat?")) return;
 
-  fetch("/delete_chat/" + id, {method: "POST"})
+  fetch("/delete_chat/" + id, { method: "POST" })
     .then(() => {
       if (currentSessionId === id) {
         currentSessionId = null;
@@ -138,7 +178,7 @@ function renameChat(id) {
   fetch("/rename_chat/" + id, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({title: name})
+    body: JSON.stringify({ title: name })
   }).then(() => loadHistory());
 }
 
