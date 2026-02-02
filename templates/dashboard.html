@@ -6,8 +6,8 @@
 
 <style>
 .light-mode {
-  background: #f4f7fb;
-  color: #111;
+  background: #CFCFCF;
+  color: gray;
 }
 
 .light-mode #sidebar {
@@ -62,19 +62,19 @@
   border:1px solid #00bfa5;
 }
 
-body{margin:0;background:#0b0f1a;color:white;font-family:Arial;height:100vh;display:flex;}
-#sidebar{width:260px;background:#050814;border-right:2px solid #00ffe1;padding:10px;overflow-y:auto;}
-#sidebar h3{color:#00ffe1;text-align:center;}
+body{margin:0;background:#36454f;color:white;font-family:Arial;height:100vh;display:flex;}
+#sidebar{width:260px;background:#36454f;border-right:2px solid #00ffe1;padding:10px;overflow-y:auto;}
+#sidebar h3{color:#1dacd6;text-align:center;}
 .chat-item{padding:10px;background:#11162a;margin-bottom:8px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
 .chat-item:hover{background:#00ffe1;color:black;}
 .chat-item span{flex:1;}
 .chat-item button{background:none;border:none;color:#00ffe1;cursor:pointer;margin-left:5px;}
 
 #main{flex:1;display:flex;flex-direction:column;padding:15px;}
-#chatBox{flex:1;overflow-y:auto;padding:10px;}
+#chatBox{flex:1;overflow-y:auto;padding:10px;background:#36454f;border-radius:15px}
 .msg{max-width:70%;padding:10px;margin:8px 0;border-radius:12px;}
-.user{background:#00ffe1;color:black;align-self:flex-end;}
-.ai{background:#11162a;border:1px solid #00ffe1;align-self:flex-start;}
+.user{background:#36454f;color:black;align-self:flex-end;}
+.ai{background:#91a3b0;border:1px solid #00ffe1;align-self:flex-start;}
 
 #controls{display:flex;gap:10px;margin-top:10px;align-items:center;}
 textarea{flex:1;padding:10px;border-radius:10px;border:2px solid #00ffe1;background:#11162a;color:white;resize:none;height:60px;}
@@ -94,7 +94,7 @@ select{background:#11162a;color:white;border:1px solid #00ffe1;border-radius:6px
 </div>
 
 <div id="main">
-  <h2 style="color:#00ffe1;">🤖 AniSun AI</h2>
+  <h2 style="color:#1dacd6;">🤖 AniSun AI</h2>
 
   <select id="languageSelect" onchange="changeLanguage()">
     <option value="hindi">Hindi</option>
