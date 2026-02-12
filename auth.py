@@ -16,10 +16,10 @@ def signup():
             (username, password)
         )
         db.commit()
-        return redirect("/")
-    except:
-        return "User already exists"
-
+        return redirect("/login")
+    except Exception as e:
+        return f"Signup error: {e}"
+    
 @auth.route("/login", methods=["POST"])
 def login():
     db = get_db()
