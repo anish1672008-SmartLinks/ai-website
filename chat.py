@@ -46,7 +46,7 @@ def ai_chat():
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
             messages=messages
         )
         reply = response.choices[0].message.content
